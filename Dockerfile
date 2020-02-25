@@ -34,7 +34,7 @@ RUN addgroup -g $SUBSONIC_GID subsonic && \
 # Create subsonic data directory ($SUBSONIC_DATA). This is where subsonic stores
 # its state information. This is normally overriden with --volume, but we create
 # it here in case the user prefers to save state in the container itself.
-RUN mkdir $SUBSONIC_DATA && \
+RUN mkdir -p $SUBSONIC_DATA && \
     chown subsonic $SUBSONIC_DATA && \
     chmod 0770 $SUBSONIC_DATA
 
