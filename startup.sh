@@ -116,6 +116,7 @@ done
 # Create Subsonic home directory.
 mkdir -p \
     ${SUBSONIC_HOME} \
+    ${SUBSONIC_DEFAULT_MUSIC_FOLDER} \
     ${SUBSONIC_DEFAULT_PODCAST_FOLDER} \
     ${SUBSONIC_DEFAULT_PLAYLIST_FOLDER} \
     /tmp/subsonic
