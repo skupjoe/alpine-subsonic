@@ -7,6 +7,7 @@
 #
 # Adapted for docker use by Michael Schuerig <michael@schuerig.de>
 # Adapted for alpine/docker use by Marco Paganini <paganini@paganini.net>
+# Adapted for architectural reasons by Alisson Vassopoli <alisson_vassopoli@hotmail.com>
 #
 ###################################################################################
 

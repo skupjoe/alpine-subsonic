@@ -1,6 +1,6 @@
 FROM alpine
 
-MAINTAINER paganini@paganini.net
+LABEL MAINTAINER="alisson_vassopoli@hotmail.com"
 
 # Desired UID & GID
 ENV SUBSONIC_UID=10000
