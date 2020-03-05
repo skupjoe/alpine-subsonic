@@ -26,8 +26,8 @@ RUN addgroup -g $SUBSONIC_GID subsonic && \
     mkdir -p $SUBSONIC_HOME && \
     tar zxvf /tmp/subsonic.tar.gz -C $SUBSONIC_BIN && \
     rm -f /tmp/*.tar.gz && \
-    chown subsonic $SUBSONIC_BIN && \
-    chown subsonic $SUBSONIC_HOME && \
+    chown -R subsonic $SUBSONIC_BIN && \
+    chown -R subsonic $SUBSONIC_HOME && \
     chmod 0770 $SUBSONIC_BIN && \
     chmod 0770 $SUBSONIC_HOME
 
@@ -35,7 +35,7 @@ RUN addgroup -g $SUBSONIC_GID subsonic && \
 # its state information. This is normally overriden with --volume, but we create
 # it here in case the user prefers to save state in the container itself.
 RUN mkdir -p $SUBSONIC_DATA && \
-    chown subsonic $SUBSONIC_DATA && \
+    chown -R subsonic $SUBSONIC_DATA && \
     chmod 0770 $SUBSONIC_DATA
 
 # Install java8, ffmpeg, lame & friends.
