@@ -1,0 +1,18 @@
+version: "3.7"
+services:
+
+  subsonic:
+    build:
+      context: .
+    restart: always
+    environment:
+      - SUBSONIC_MAX_MEMORY=512
+    volumes:
+      - "~/Documents/subsonic/state:/var/subsonic/home:rw"
+      - "~/Documents/subsonic/media:/var/subsonic/media:rw"
+    ports:
+      - "4040:4040"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
