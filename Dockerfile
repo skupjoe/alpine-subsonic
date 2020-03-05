@@ -3,8 +3,8 @@ FROM alpine
 LABEL MAINTAINER="alisson_vassopoli@hotmail.com"
 
 # Desired UID & GID
-ENV SUBSONIC_UID=10000
-ENV SUBSONIC_GID=10000
+ENV SUBSONIC_UID=1000
+ENV SUBSONIC_GID=1000
 ENV SUBSONIC_BIN=/var/subsonic/bin
 ENV SUBSONIC_HOME=/usr/share/subsonic
 ENV SUBSONIC_DATA=/var/subsonic
