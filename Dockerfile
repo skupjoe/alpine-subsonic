@@ -6,8 +6,8 @@ LABEL MAINTAINER="alisson_vassopoli@hotmail.com"
 ENV SUBSONIC_UID=1000
 ENV SUBSONIC_GID=1000
 ENV SUBSONIC_BIN=/var/subsonic/bin
-ENV SUBSONIC_HOME=/usr/share/subsonic
-ENV SUBSONIC_DATA=/var/subsonic
+ENV SUBSONIC_HOME=/var/subsonic/home
+ENV SUBSONIC_DATA=/var/subsonic/media
 ENV SUBSONIC_VERSION 6.1.6
 
 # Add subsonic tar.gz
