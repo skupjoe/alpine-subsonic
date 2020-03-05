@@ -44,6 +44,7 @@ usage() {
     echo "                       incoming HTTPS traffic. Default: 0 (disabled)"
     echo "  --context-path=PATH  The context path, i.e., the last part of the Subsonic"
     echo "                       URL. Typically '/' or '/subsonic'. Default '/'"
+    echo "  --db=JDBC_URL        Use alternate database. MySQL, PostgreSQL and MariaDB are currently supported."
     echo "  --max-memory=MB      The memory limit (max Java heap size) in megabytes."
     echo "                       Default: 100"
     echo "  --pidfile=PIDFILE    Write PID to this file. Default not created."
@@ -81,6 +82,9 @@ while [ $# -ge 1 ]; do
             ;;
         --context-path=?*)
             SUBSONIC_CONTEXT_PATH=${1#--context-path=}
+            ;;
+        --db=?*)
+            SUBSONIC_DB=${1#--db=}
             ;;
         --max-memory=?*)
             SUBSONIC_MAX_MEMORY=${1#--max-memory=}
@@ -126,6 +130,7 @@ exec /usr/bin/java -Xmx${SUBSONIC_MAX_MEMORY}m \
     -Dsubsonic.port=${SUBSONIC_PORT} \
     -Dsubsonic.httpsPort=${SUBSONIC_HTTPS_PORT} \
     -Dsubsonic.contextPath=${SUBSONIC_CONTEXT_PATH} \
+    -Dsubsonic.db="${SUBSONIC_DB}" \
     -Dsubsonic.defaultMusicFolder=${SUBSONIC_DEFAULT_MUSIC_FOLDER} \
     -Dsubsonic.defaultPodcastFolder=${SUBSONIC_DEFAULT_PODCAST_FOLDER} \
     -Dsubsonic.defaultPlaylistFolder=${SUBSONIC_DEFAULT_PLAYLIST_FOLDER} \
