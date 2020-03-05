@@ -113,6 +113,9 @@ while [ $# -ge 1 ]; do
     shift
 done
 
+#Owning in case of another user associeted due to some sync strategy
+chown -R subsonic $SUBSONIC_DATA 
+
 # Create Subsonic home directory.
 mkdir -p \
     ${SUBSONIC_HOME} \
