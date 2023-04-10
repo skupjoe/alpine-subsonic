@@ -7,19 +7,22 @@
 #
 # Adapted for docker use by Michael Schuerig <michael@schuerig.de>
 # Adapted for alpine/docker use by Marco Paganini <paganini@paganini.net>
+# Adapted for architectural reasons by Alisson Vassopoli <alisson_vassopoli@hotmail.com>
 #
 ###################################################################################
 
-SUBSONIC_HOME=/var/subsonic
-SUBSONIC_HOST=0.0.0.0
-SUBSONIC_PORT=4040
-SUBSONIC_HTTPS_PORT=0
-SUBSONIC_CONTEXT_PATH=/
-SUBSONIC_MAX_MEMORY=200
-SUBSONIC_PIDFILE=
-SUBSONIC_DEFAULT_MUSIC_FOLDER=/var/music
-SUBSONIC_DEFAULT_PODCAST_FOLDER=${SUBSONIC_HOME}/podcasts
-SUBSONIC_DEFAULT_PLAYLIST_FOLDER=${SUBSONIC_HOME}/playlists
+SUBSONIC_HOME=${SUBSONIC_HOME:-/var/subsonic/home}
+SUBSONIC_DATA=${SUBSONIC_DATA:-/var/subsonic/media}
+SUBSONIC_HOST=${SUBSONIC_HOST:-0.0.0.0}
+SUBSONIC_PORT=${SUBSONIC_PORT:-4040}
+SUBSONIC_HTTPS_PORT=${SUBSONIC_HTTPS_PORT:-0}
+SUBSONIC_CONTEXT_PATH=${SUBSONIC_CONTEXT_PATH:-/}
+SUBSONIC_DB=${SUBSONIC_DB}
+SUBSONIC_MAX_MEMORY=${SUBSONIC_MAX_MEMORY:-200}
+SUBSONIC_PIDFILE=${SUBSONIC_PIDFILE}
+SUBSONIC_DEFAULT_MUSIC_FOLDER=${SUBSONIC_DEFAULT_MUSIC_FOLDER:-${SUBSONIC_DATA}/music}
+SUBSONIC_DEFAULT_PODCAST_FOLDER=${SUBSONIC_DEFAULT_PODCAST_FOLDER:-${SUBSONIC_DATA}/podcasts}
+SUBSONIC_DEFAULT_PLAYLIST_FOLDER=${SUBSONIC_DEFAULT_PLAYLIST_FOLDER:-${SUBSONIC_DATA}/playlists}
 
 SUBSONIC_USER=subsonic
 
@@ -43,6 +46,7 @@ usage() {
     echo "                       incoming HTTPS traffic. Default: 0 (disabled)"
     echo "  --context-path=PATH  The context path, i.e., the last part of the Subsonic"
     echo "                       URL. Typically '/' or '/subsonic'. Default '/'"
+    echo "  --db=JDBC_URL        Use alternate database. MySQL, PostgreSQL and MariaDB are currently supported."
     echo "  --max-memory=MB      The memory limit (max Java heap size) in megabytes."
     echo "                       Default: 100"
     echo "  --pidfile=PIDFILE    Write PID to this file. Default not created."
@@ -81,6 +85,9 @@ while [ $# -ge 1 ]; do
         --context-path=?*)
             SUBSONIC_CONTEXT_PATH=${1#--context-path=}
             ;;
+        --db=?*)
+            SUBSONIC_DB=${1#--db=}
+            ;;
         --max-memory=?*)
             SUBSONIC_MAX_MEMORY=${1#--max-memory=}
             ;;
@@ -106,9 +113,13 @@ while [ $# -ge 1 ]; do
     shift
 done
 
+#Owning in case of another user associeted due to some sync strategy
+chown -R subsonic $SUBSONIC_DATA 
+
 # Create Subsonic home directory.
 mkdir -p \
     ${SUBSONIC_HOME} \
+    ${SUBSONIC_DEFAULT_MUSIC_FOLDER} \
     ${SUBSONIC_DEFAULT_PODCAST_FOLDER} \
     ${SUBSONIC_DEFAULT_PLAYLIST_FOLDER} \
     /tmp/subsonic
@@ -125,6 +136,7 @@ exec /usr/bin/java -Xmx${SUBSONIC_MAX_MEMORY}m \
     -Dsubsonic.port=${SUBSONIC_PORT} \
     -Dsubsonic.httpsPort=${SUBSONIC_HTTPS_PORT} \
     -Dsubsonic.contextPath=${SUBSONIC_CONTEXT_PATH} \
+    -Dsubsonic.db="${SUBSONIC_DB}" \
     -Dsubsonic.defaultMusicFolder=${SUBSONIC_DEFAULT_MUSIC_FOLDER} \
     -Dsubsonic.defaultPodcastFolder=${SUBSONIC_DEFAULT_PODCAST_FOLDER} \
     -Dsubsonic.defaultPlaylistFolder=${SUBSONIC_DEFAULT_PLAYLIST_FOLDER} \
