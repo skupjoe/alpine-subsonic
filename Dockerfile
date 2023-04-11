@@ -2,13 +2,19 @@ FROM alpine
 
 MAINTAINER paganini@paganini.net
 
-# Desired UID & GID
-ENV SUBSONIC_UID=1000
-ENV SUBSONIC_GID=1000
-ENV SUBSONIC_BIN=/var/subsonic/bin
-ENV SUBSONIC_HOME=/var/subsonic/home
-ENV SUBSONIC_DATA=/var/subsonic/media
-ENV SUBSONIC_VERSION 6.1.6
+ARG SUBSONIC_UID=1000
+ARG SUBSONIC_GID=1000
+ARG SUBSONIC_BIN=/var/subsonic/bin
+ARG SUBSONIC_HOME=/var/subsonic/home
+ARG SUBSONIC_DATA=/var/subsonic/media
+ARG SUBSONIC_VERSION=6.1.6
+
+ENV SUBSONIC_UID=${SUBSONIC_UID} \
+    SUBSONIC_GID=${SUBSONIC_GID} \
+    SUBSONIC_BIN=${SUBSONIC_BIN} \
+    SUBSONIC_HOME=${SUBSONIC_HOME} \
+    SUBSONIC_DATA=${SUBSONIC_DATA} \
+    SUBSONIC_VERSION=${SUBSONIC_VERSION}
 
 # Add subsonic tar.gz
 ADD https://sourceforge.net/projects/subsonic/files/subsonic/${SUBSONIC_VERSION}/subsonic-${SUBSONIC_VERSION}-standalone.tar.gz/download /tmp/subsonic.tar.gz
