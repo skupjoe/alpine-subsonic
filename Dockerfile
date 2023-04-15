@@ -6,14 +6,14 @@ ARG SUBSONIC_UID=1000
 ARG SUBSONIC_GID=1000
 ARG SUBSONIC_BIN=/var/subsonic/bin
 ARG SUBSONIC_HOME=/var/subsonic/home
-ARG SUBSONIC_DATA=/var/subsonic/media
+ARG SUBSONIC_MEDIA=/var/subsonic/media
 ARG SUBSONIC_VERSION=6.1.6
 
 ENV SUBSONIC_UID=${SUBSONIC_UID} \
     SUBSONIC_GID=${SUBSONIC_GID} \
     SUBSONIC_BIN=${SUBSONIC_BIN} \
     SUBSONIC_HOME=${SUBSONIC_HOME} \
-    SUBSONIC_DATA=${SUBSONIC_DATA} \
+    SUBSONIC_MEDIA=${SUBSONIC_MEDIA} \
     SUBSONIC_VERSION=${SUBSONIC_VERSION}
 
 # Add subsonic tar.gz
@@ -21,11 +21,9 @@ ADD https://sourceforge.net/projects/subsonic/files/subsonic/${SUBSONIC_VERSION}
 
 # - Create a new group 'subsonic' with SUBSONIC_GID, home $SUBSONIC_HOME
 # - Create user 'subsonic' with SUBSONIC_UID, add to that group.
-# - Create $SUBSONIC_BIN
-# - Create $SUBSONIC_HOME
+# - Create $SUBSONIC_BIN & set permissions on $SUBSONIC_BIN
+# - Create $SUBSONIC_HOME & set permissions on $SUBSONIC_HOME
 # - Untar the subsonic tar file into $SUBSONIC_BIN
-# - Set permissions of $SUBSONIC_BIN
-# - Set permissions of $SUBSONIC_HOME
 RUN addgroup -g $SUBSONIC_GID subsonic && \
     adduser -D -H -h $SUBSONIC_BIN -u $SUBSONIC_UID -G subsonic -g "Subsonic User" subsonic && \
     mkdir -p $SUBSONIC_BIN && \
@@ -39,13 +37,11 @@ RUN addgroup -g $SUBSONIC_GID subsonic && \
     chown -R subsonic $SUBSONIC_BIN && \
     chmod 0770 $SUBSONIC_BIN
 
-# Create subsonic data directory ($SUBSONIC_DATA). This is where subsonic stores
-# its state information. This is normally overriden with --volume, but we create
-# it here in case the user prefers to save state in the container itself.
-RUN if [ ! -d "$SUBSONIC_DATA" ]; then \
-        mkdir -p $SUBSONIC_DATA && \
-        chown -R subsonic $SUBSONIC_DATA && \
-        chmod 0770 $SUBSONIC_DATA; \
+# Create subsonic media directory ($SUBSONIC_MEDIA) if it doesn't already exist.
+RUN if [ ! -d "$SUBSONIC_MEDIA" ]; then \
+        mkdir -p $SUBSONIC_MEDIA && \
+        chown -R subsonic $SUBSONIC_MEDIA && \
+        chmod 0770 $SUBSONIC_MEDIA; \
     fi
 
 # Install java8, ffmpeg, lame & friends.
