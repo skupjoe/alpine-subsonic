@@ -8,10 +8,11 @@
 # Adapted for docker use by Michael Schuerig <michael@schuerig.de>
 # Adapted for alpine/docker use by Marco Paganini <paganini@paganini.net>
 # Adapted for architectural reasons by Alisson Vassopoli <alisson_vassopoli@hotmail.com>
+# Adapted & simplified further by Joseph Skupniewicz <joseph.skup@gmail.com>
 #
 ###################################################################################
 
-SUBSONIC_HOME=${SUBSONIC_HOME:-/var/subsonic/home}
+SUBSONIC_DATA=${SUBSONIC_DATA:-/var/subsonic/data}
 SUBSONIC_MEDIA=${SUBSONIC_MEDIA:-/var/subsonic/media}
 SUBSONIC_HOST=${SUBSONIC_HOST:-0.0.0.0}
 SUBSONIC_PORT=${SUBSONIC_PORT:-4040}
@@ -71,7 +72,7 @@ while [ $# -ge 1 ]; do
             usage
             ;;
         --home=?*)
-            SUBSONIC_HOME=${1#--home=}
+            SUBSONIC_DATA=${1#--home=}
             ;;
         --host=?*)
             SUBSONIC_HOST=${1#--host=}
@@ -118,20 +119,20 @@ done
 
 # Create Subsonic home directory.
 mkdir -p \
-    ${SUBSONIC_HOME} \
+    ${SUBSONIC_DATA} \
     ${SUBSONIC_DEFAULT_MUSIC_FOLDER} \
     ${SUBSONIC_DEFAULT_PODCAST_FOLDER} \
     ${SUBSONIC_DEFAULT_PLAYLIST_FOLDER} \
     /tmp/subsonic
 
-LOG=${SUBSONIC_HOME}/subsonic_sh.log
+LOG=${SUBSONIC_DATA}/subsonic_sh.log
 truncate -s0 ${LOG}
 
 
 cd $SUBSONIC_BIN
 
 exec /usr/bin/java -Xmx${SUBSONIC_MAX_MEMORY}m \
-    -Dsubsonic.home=${SUBSONIC_HOME} \
+    -Dsubsonic.home=${SUBSONIC_DATA} \
     -Dsubsonic.host=${SUBSONIC_HOST} \
     -Dsubsonic.port=${SUBSONIC_PORT} \
     -Dsubsonic.httpsPort=${SUBSONIC_HTTPS_PORT} \
