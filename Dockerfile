@@ -39,9 +39,9 @@ RUN addgroup -g $SUBSONIC_GID subsonic && \
 
 # Create subsonic media directory ($SUBSONIC_MEDIA) if it doesn't already exist.
 RUN if [ ! -d "$SUBSONIC_MEDIA" ]; then \
-        mkdir -p $SUBSONIC_MEDIA && \
-        chown -R subsonic $SUBSONIC_MEDIA && \
-        chmod 0770 $SUBSONIC_MEDIA; \
+        echo mkdir -p $SUBSONIC_MEDIA && \
+        echo chown -R subsonic $SUBSONIC_MEDIA && \
+        echo chmod 0770 $SUBSONIC_MEDIA; \
     fi
 
 # Install java8, ffmpeg, lame & friends.
